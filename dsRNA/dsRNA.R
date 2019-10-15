@@ -56,7 +56,8 @@ main <- function()
     g1 <- ggplot( Xm, aes(x=Drug, y=Count) ) + theme_bw() + coord_flip() +
         geom_bar( aes(fill=Highlight), stat="identity", alpha=0.75 ) + 
         scale_fill_manual( values=pal, guide=FALSE ) +
-        geom_point( data=X ) + theme_bold()
+        geom_point( data=X ) + theme_bold() + ylab("Nuclei Count") +
+        scale_y_continuous(position="right")
 
     ## Overall distribution of values
     g2 <- ggplot( Xm, aes(x=Count) ) + theme_bw() +
@@ -69,6 +70,7 @@ main <- function()
     ## Tas scores
     g3 <- ggplot( Z, aes(y=Drug, x=Target, fill=TAS) ) + theme_bw() +
         geom_tile() + scale_y_discrete(drop=FALSE, position="right") +
+        scale_x_discrete(position="top") +
         scale_fill_manual( values = vtas, guide=gl ) + theme_bold() +
         theme( legend.position="bottom", axis.title.y=element_blank(),
               axis.text.x=element_text(angle=90, vjust=.5),
