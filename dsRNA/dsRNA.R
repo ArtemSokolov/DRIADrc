@@ -83,3 +83,21 @@ main <- function()
     ggsave( ggp, filename="dsRNA.pdf", width=9.5, height=11 )
 }
 
+cntByPlate <- function()
+{
+    library( tidyverse )
+
+    X <- openxlsx::read.xlsx( "~/Downloads/190809_all_plates_DGE_dsRNAmi_well_map.xlsx" ) %>%
+        as_tibble() %>% rename( Drug = Fluid.name, nCells = 4 ) %>%
+        mutate_at( "Plate", as_factor )
+
+    pm <- X %>% select( Plate, Drug ) %>% distinct() %>% group_by(Plate) %>%
+        summarize_at( "Drug", str_flatten, "\n" ) %>% with( set_names(Drug, Plate) )
+    levels(X$Plate) <- pm[levels(X$Plate)]
+
+    ggplot(X, aes(x=Plate, y=nCells)) + theme_bw() +
+        geom_boxplot(outlier.size=0) +
+        geom_jitter(width=0.1, alpha=0.3, color="steelblue") +
+        ylab( "Number of Nuclei" ) +
+        ggsave( "counts-by-plate.pdf", width=7, height=5.5 )
+}
