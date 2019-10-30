@@ -29,7 +29,7 @@ main <- function()
 
     ## Load TAS vectors
     vt <- c("JAK1","JAK2","JAK3","TYK2", "SIK1", "SIK2", "SIK3")
-    Y <- readRDS( "tas_vector_annotated_long.rds" ) %>%
+    Y <- syn("syn20830941") %>% readRDS() %>%
         filter( fp_name == "morgan_normal" ) %>% select(data) %>%
         unnest() %>% filter( compound_id_source == "hmsl" ) %>%
         select( LINCSID=compound_id, Target=entrez_symbol, TAS=tas ) %>%
