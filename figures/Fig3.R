@@ -75,6 +75,9 @@ Fig3 <- function( fnOut )
                Plate=NULL, Target=NULL ) %>% split( ., .$IsApproved ) %>%
         map( arrange, HMP ) %>% map( head, 15 )
 
+    ## Save a copy for plotdata.xlsx
+    bind_rows(XX) %>% write_csv( here("figures", "plotdata", "Fig3.csv") )
+
     ## Define palettes
     pal <- RColorBrewer::brewer.pal( 9, "YlOrBr" ) %>% colorRampPalette
     palA <- list( Toxicity = c("Toxic"="tomato", "Non-Toxic"="steelblue"),

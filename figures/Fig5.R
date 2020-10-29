@@ -96,6 +96,9 @@ plot_single_drug_combo_density <- function(target_combos, targets) {
         mutate_at( "Drug_Set", recode, !!!tgtmap ) %>%
         mutate_at( "Drug_Set", factor, levels=tgtmap )
 
+    ## Save a copy for plotdata.xlsx
+    write_csv( drug_sets, here("figures","plotdata","Fig5A.csv") )
+    
     ## Compose text labels for each facet
     TXT <- drug_sets %>% select( Drug_Set ) %>%
         distinct() %>% mutate( Lbl = as.character(Drug_Set) ) %>%
@@ -162,6 +165,9 @@ panelB <- function( target_combo_significance_aggregated, target_combos,
               fct_inorder() ) %>%
     unnest(data)
 
+  ## Save a copy for plotdata.xlsx
+  write_csv( plot_data, here("figures","plotdata","Fig5B.csv") )
+  
   # browser()
 
   effect_color_map <- c(

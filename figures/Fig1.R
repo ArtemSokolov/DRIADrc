@@ -35,6 +35,9 @@ panelC <- function()
     ## Unroll the background information
     BK <- R %>% select( Name, Dataset, AUC=BK ) %>% unnest(AUC)
 
+    ## Store a copy of the data for plotdata.xlsx
+    unnest(R, BK) %>% write_csv( here("figures", "plotdata", "Fig1C.csv") )
+    
     ## Generate the ridge plots
     ggplot( BK, aes(x=AUC, y=Name, fill=Dataset) ) +
         theme_ridges(center_axis_labels=TRUE) +

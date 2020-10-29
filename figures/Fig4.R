@@ -25,6 +25,9 @@ panelB <- function()
         mutate_at( "TAS", as_factor ) %>%
         mutate_at( "Target", factor, c("combined", "TYK2", str_c("JAK",3:1)) )
 
+    ## Save a copy for plotdata.xlsx
+    write_csv( X, here("figures","plotdata","Fig4B.csv") )
+
     ## Compute ECDFs over the combined ranking
     ECDF <- X %>% filter( Target == "combined", TAS != 10 ) %>%
         group_by(TAS) %>% summarize( RR = list(Rank) ) %>%
@@ -82,6 +85,9 @@ panelC <- function()
     ECDF <- read_csv( here("results","TAS-ecdf.csv"), col_types=cols() ) %>%
         filter( p.value < 0.05 ) %>% arrange( p.value ) %>%
         mutate_at( c("Target", "TAS"), as_factor )
+
+    ## Save a copy for plotdata.xlsx
+    write_csv( ECDF, here("figures","plotdata","Fig4C.csv") )
 
     ## A single p value entry for each facet
     ECDFp  <- ECDF %>% mutate_at( "p.value", ~as.character(round(.x,3)) ) %>%

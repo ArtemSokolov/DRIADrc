@@ -34,6 +34,9 @@ panelB <- function()
     ## Unroll the background information
     BK <- XX %>% select( Name, Dataset, AUC=BK ) %>% unnest(AUC)
 
+    ## Save a copy for plotdata.xlsx
+    unnest( XX, BK ) %>% write_csv( here("figures","plotdata","Fig2B.csv") )
+
     ## Generate the ridge plots
     ggplot( BK, aes(x=AUC, y=Dataset, fill=Dataset) ) +
         facet_wrap( ~Name, nrow=1 ) +
