@@ -19,6 +19,9 @@ TXT <- BK0 %>% select(Task) %>% distinct
 
 BK <- BK0 %>% mutate( AUC=map_dbl(Vals,mean), s=map_dbl(Vals,sd) )
 
+## Save a copy for plotdata.xlsx
+BK %>% select(-Vals) %>% write_csv( here("figures", "plotdata", "Suppl1.csv") )
+
 f <- function( p, k, a, step=0.5 )
 {
     p + geom_ribbon( aes(ymin=AUC+k*s, ymax=AUC+(k+step)*s, fill=Dataset), alpha=a ) +

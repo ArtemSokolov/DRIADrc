@@ -21,6 +21,9 @@ DFX <- inner_join(DFX1, DFX2, by=c("Drug","Gene"))
 CR <- DFX %>% group_by( Drug ) %>% summarize( R=cor(logFC1, logFC2, method="sp") ) %>%
     mutate( Lbl=str_c(round(R,3), "  \n") )
 
+## Save a copy for plotdata.xlsx
+write_csv( DFX, here("figures","plotdata","Suppl2.csv") )
+
 gg <- ggplot(DFX, aes(x=logFC1, y=logFC2)) + theme_bw() + theme_bold() +
     geom_point(alpha=0.5, color="steelblue") +
     facet_wrap( ~Drug, nrow=2 ) +

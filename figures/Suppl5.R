@@ -23,6 +23,9 @@ lvl <- hclust(DM) %>% reorder(DM) %>% dendextend::order.hclust() %>% labels(DM)[
 R <- TMT %>% mutate(Drug1 = factor(Drug1, lvl),
                     Drug2 = factor(Drug2, rev(lvl)))
 
+## Save a copy for plotdata.xlsx
+write_csv( R, here("figures","plotdata","Suppl5.csv") )
+
 colh <- "#B2182B"
 
 ## Plot the heatmap

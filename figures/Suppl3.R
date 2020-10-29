@@ -33,7 +33,10 @@ DGE <- map( XY[c("DGE1","DGE2")], summarize_at, vars(-HUGO), sum ) %>%
     summarize_at( "DGEcount", median ) %>% ungroup() %>%
     inner_join( TXm, by="Drug" ) %>%
     mutate( Highlight = ifelse(`Nuclei counts` < 2400, "toxic", "no") )
-    
+
+## Save a copy for plotdata.xlsx
+write_csv( DGE, here("figures","plotdata","Suppl3.csv") )
+
 ## Plot the bi-modal distribution of nuclei counts
 gg1 <- ggplot( TXm, aes(x=`Nuclei counts`) ) + theme_bw() + theme_bold() +
     geom_density() + geom_vline( xintercept=2400, lty="dashed" ) +

@@ -34,6 +34,9 @@ X <- filter(counts, gene_name %in% hand_picked_isg) %>%
     inner_join( tas, by="lspci_id" ) %>%
     mutate( Affinity = ifelse(tas == 1, "strong", "weak") )
 
+## Save a copy for plotdata.xlsx
+write_csv( X, here("figures","plotdata","Suppl4.csv") )
+
 pal <- c("1" = "#b2182b", "2" = "#ef8a62", "3" = "#fddbc7")
 gg <- ggplot(X, aes(Affinity, count, color = tas)) + theme_bw() + theme_bold() +
     geom_quasirandom() + facet_wrap(vars(gene_name), scale = "free_y") +

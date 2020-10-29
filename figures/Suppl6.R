@@ -13,6 +13,9 @@ R <- readRDS( here("results/allpred.rds") ) %>%
                          nn  = "Neural\nNetwork") ) %>%
     mutate( Mtd = factor(Mtd, unique(Mtd)) )
 
+## Save a copy for plotdata.xlsx
+select( R, -Feats ) %>% write_csv( here("figures","plotdata","Suppl6.csv") )
+
 gg <- ggplot( R, aes(x=Mtd, y=AUC) ) + theme_bw() +
     geom_boxplot() + xlab("") +
     theme(panel.grid.major.x = element_blank(),
