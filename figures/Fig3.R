@@ -15,7 +15,8 @@ legendGrobScore <- function( cbr, mar = margin(b=0.5, l=0.5, unit="cm"))
     gg <- ggplot( X, aes(x=x, y=y, color=HMP) ) + geom_bar(stat="identity") +
         scale_color_gradientn( colors=pal(100), guide=gcb, trans="log",
                               breaks=c(0.005,0.04,0.3) ) +
-        theme( legend.title = etxt(12), legend.text = etxt(10),
+        theme(legend.title = element_text(size=12),
+              legend.text = element_text(size=10),
               legend.position="bottom", legend.margin=mar )
     cowplot::get_legend( gg )
 }
@@ -88,7 +89,7 @@ Fig3 <- function( fnOut )
         
     ## Set up the plotting mechanism
     fplot <- partial( pheatmap::pheatmap, cluster_rows=FALSE, cluster_cols=FALSE,
-                     color=pal(100), breaks=cbr, fontsize=11, fontface="bold", gaps_col=5,
+                     color=pal(100), breaks=cbr, fontsize=10, gaps_col=5,
                      number_color="black", width=6.5, height=6, silent=TRUE,
                      annotation_colors=palA, legend=FALSE, annotation_legend=FALSE )
     
@@ -105,7 +106,8 @@ Fig3 <- function( fnOut )
     gg2 <- ggplot( X2, aes(x=Drug, fill=Toxicity) ) + geom_bar(aes(y=1), stat="identity") +
         scale_fill_manual( values=palA$Toxicity,
                           guide=guide_legend(title.position="top") ) +
-        theme( legend.title = etxt(12), legend.text = etxt(10),
+        theme(legend.title = element_text(size=12),
+              legend.text = element_text(size=10),
               legend.position="bottom", legend.margin=margin(b=0.5, l=0.5, unit="cm") )
     gl2 <- cowplot::get_legend( gg2 )
     
@@ -115,7 +117,8 @@ Fig3 <- function( fnOut )
         geom_bar( aes(y=1), stat="identity" ) +
         scale_fill_manual( values=palA$Approval,
                           guide=guide_legend(title.position="top") ) +
-        theme( legend.title=etxt(12), legend.text=etxt(10),
+        theme(legend.title=element_text(size=12),
+              legend.text=element_text(size=10),
               legend.position="bottom", legend.margin=margin(l=0, b=0.5, unit="cm"))
     gl3 <- cowplot::get_legend( gg3 )
 
@@ -129,10 +132,10 @@ Fig3 <- function( fnOut )
     ## Add custom annotations
     ggf <- cowplot::ggdraw(gg) +
         cowplot::draw_text( "Drug (FDA-proposed MoA) [Plate Index]",
-                           0.37, 0.93, fontface="bold", size=11 ) +
+                           0.37, 0.93, size=11 ) +
         cowplot::draw_text( "Drug (Vendor Target) [Plate Index]",
-                           0.87, 0.93, fontface="bold", size=11 )
-    ggsave( fnOut, ggf, width=11, height=7.1 )
+                           0.87, 0.93, size=11 )
+    ggsave( fnOut, ggf, width=260, height=167, units="mm" )
 }
 
 ## Compose the filename or extract it from the command line
