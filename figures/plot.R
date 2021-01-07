@@ -17,7 +17,7 @@ pdfGrob <- function( fnPdf )
 }
 
 ## Short-hand for bold element_text of desired size
-etxt <- function(s, ...) {element_text( size = s, face = "bold", ... )}
+etxt <- function(s, ...) {element_text( size = s, ... )}
 
 ## Custom ggplot theme that boldifies text elements
 theme_bold <- function()

@@ -2,6 +2,13 @@ library( here )
 
 source( here("figures","plot.R") )
 
+theme_fig4 <- function()
+{
+    theme( axis.text = etxt(10), axis.title = etxt(12), legend.text = etxt(10),
+          legend.title = etxt(12), strip.text = etxt(10),
+          strip.background = element_blank() )
+}
+
 panelB <- function()
 {
     ## Load drug ranking combining scores across plates
@@ -47,8 +54,8 @@ panelB <- function()
 
     ## ECDF plot
     gg1 <- ggplot( ECDF, aes(x=Rank, y=CumProb) ) +
-        theme_bw() + theme_bold() + crd() +
-        geom_step( aes(color=TAS), size=1.1 ) +
+        theme_bw() + theme_fig4() + crd() +
+        geom_step( aes(color=TAS), size=1 ) +
         xlab("Drug Rank") + ylab("Cum. frac. of drugs") +
         scale_color_manual( values=cpal ) +
         scale_x_continuous(
@@ -59,7 +66,7 @@ panelB <- function()
 
     ## TAS plot
     gg2 <- ggplot( X, aes(x=Rank, y=Target, fill=TAS) ) +
-        theme_bw() + theme_bold() + crd() +
+        theme_bw() + theme_fig4() + crd() +
         geom_tile() + labs(x=NULL) +
         scale_fill_manual( values=fpal, guide=FALSE ) +
         theme( axis.line.x = elbl, axis.ticks = elbl, axis.text.x = elbl,
@@ -68,12 +75,12 @@ panelB <- function()
     ## Highlight approved drugs
     gg3 <- ggplot( A, aes(x=Rank, y=0.01) ) + theme_void() + crd() +
         geom_col( aes(y=0.01), fill="black" ) +
-        ggrepel::geom_text_repel( aes(label=Drug), fontface="bold",
+        ggrepel::geom_text_repel( aes(label=Drug),
                                  nudge_y=1, direction="x",
                                  angle=90, size = 11 / .pt ) +
         scale_y_continuous( lim=c(0,.1), expand=c(0,0) )
 
-    egg::ggarrange( plots=list(gg3, gg2, gg1), ncol=1, heights = c(1.5,1,3.5) )
+    egg::ggarrange( plots=list(gg3, gg2, gg1), ncol=1, heights = c(1.75,1,3.3) )
 }
 
 panelC <- function()
@@ -94,10 +101,10 @@ panelC <- function()
 
     ## Plot each target on a separate facet
     gg <- ggplot( ECDF, aes(x=Rank, y=CumProb) ) +
-        theme_bw() + theme_bold() +
+        theme_bw() + theme_fig4() +
         facet_wrap( ~Target, nrow=2 ) +
-        geom_step( aes(color=TAS, linetype=TAS), size=1.1 ) +
-        geom_text( aes(label=p.value), data=ECDFp, fontface="bold",
+        geom_step( aes(color=TAS, linetype=TAS), size=1 ) +
+        geom_text( aes(label=p.value), data=ECDFp,
                   x=max_rank, y=0, vjust="inward", hjust="inward" ) +
         xlab( "Drug Rank" ) + ylab( "Cumulative Probability" ) +
         scale_color_manual( values = cpal, guide=FALSE ) +
@@ -115,10 +122,10 @@ pC <- panelC()
 
 ff <- cowplot::plot_grid( NULL, pA, NULL, pB, NULL, pC, ncol=1,
                          labels=c("a","","b","","c",""),
-                         rel_heights=c(0.001,1, 0.05,1.1, 0.1,0.75),
+                         rel_heights=c(0.001,0.9, 0.05,1.1, 0.12,0.75),
                          label_size=24 )
 
 ## Compose the filename or extract it from the command line
 cmd <- commandArgs( trailingOnly=TRUE )
 fnOut <- `if`( length(cmd) > 0, cmd[1], str_c("Fig4-", Sys.Date(), ".pdf") )
-ggsave( fnOut, ff, width=9, height=13 )
+ggsave( fnOut, ff, width=175, height=260, units="mm" )
