@@ -309,5 +309,5 @@ fig5_plot <- Fig5()
 cmd <- commandArgs( trailingOnly=TRUE )
 fnOut <- `if`( length(cmd) > 0, cmd[1], str_c("Fig5-", Sys.Date(), ".pdf") )
 
-ggsave2( fnOut, fig5_plot, width = 9, height = 7 )
+ggsave2( fnOut, fig5_plot, width = 228, height = 177, units="mm" )
 
