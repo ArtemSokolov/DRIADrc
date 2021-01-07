@@ -25,10 +25,12 @@ panelC <- function()
     R <- litRes %>% select(-Feats) %>% arrange( pval ) %>%
         group_by(Set) %>% slice(1) %>% ungroup() %>%
         inner_join(V, by="Set") %>% mutate_at("Set", f) %>%
-        mutate_at( "Description", recode, "Tau Neuropathology" = "PSP Tau Neuropathology" ) %>%
+        mutate_at( "Description", recode,
+                  "Tau Neuropathology" = "PSP Tau Neuropathology",
+                  "Ugt8 Knock-out Mouse" = "UGT8 Knock-out Mouse") %>%
         mutate( Name = glue::glue("{Set}\n{Description}"),
-               Label = glue::glue("p={pval}") ) %>%
-        mutate_at( "Label", recode, `p=0` = "p<0.01" ) %>%
+               Label = glue::glue("italic(p)=={pval}") ) %>%
+        mutate_at( "Label", recode, `italic(p)==0` = "italic(p)<0.01" ) %>%
         select( -Set, -Description ) %>%
         arrange( AUC ) %>% mutate_at( "Name", as_factor )
 
@@ -36,16 +38,23 @@ panelC <- function()
     BK <- R %>% select( Name, Dataset, AUC=BK ) %>% unnest(AUC)
 
     ## Generate the ridge plots
-    ggplot( BK, aes(x=AUC, y=Name, fill=Dataset) ) +
+    gg <- ggplot( BK, aes(x=AUC, y=Name, fill=Dataset) ) +
         theme_ridges(center_axis_labels=TRUE) +
-        geom_density_ridges2(scale=1.25, size=1) +
+        geom_density_ridges2(scale=1.25, size=0.7) +
         geom_segment( aes(x=AUC, xend=AUC, y=as.numeric(Name), yend=as.numeric(Name)+0.9),
-                     data=R, color="darkgray", lwd=2 ) +
+                     data=R, color="darkgray", lwd=1 ) +
         geom_text( aes(y=as.numeric(Name)+0.75, label=Label, hjust=0),
-                  x=0.85, hjust=0, data=R, size=4 ) +
-        scale_y_discrete( name="Gene List Scored" ) + coord_cartesian(clip="off") +
-        scale_fill_manual( values=dsPal(), guide=FALSE ) 
-    ##        theme( axis.text=etxt(12), axis.title=etxt(14) )
+                  parse=TRUE, x=0.85, hjust=0, data=R, size=3 ) +
+        scale_y_discrete( name="Gene List Scored" ) +
+        coord_cartesian(clip="off") +
+        scale_fill_manual( values=dsPal() ) +
+        guides( fill = guide_legend(override.aes = list(linetype = 0)) ) +
+        theme(legend.position="bottom",
+              axis.text=element_text(size=8),
+              axis.title=element_text(size=10),
+              legend.text=element_text(size=8),
+              legend.title=element_text(size=10),
+              legend.margin=margin(l=-3, t=0, unit='cm'))
 }
 
 ## Identify individual panels
@@ -58,9 +67,9 @@ fAB <- cowplot::plot_grid( NULL, pA, NULL, pB, ncol=2, labels=c("a","","b",""),
                           rel_widths=c(0.02,1), rel_heights=c(1,0.8), label_size=24 )
 
 ff <- cowplot::plot_grid( fAB, NULL, pC, nrow=1, labels=c("","c",""),
-                         rel_widths=c(1.5,0.02,1), label_size=24 )
+                         rel_widths=c(1.25,0.02,1), label_size=24 )
 
 ## Compose the filename or extract it from the command line
 cmd <- commandArgs( trailingOnly=TRUE )
 fnOut <- `if`( length(cmd) > 0, cmd[1], str_c("Fig1-", Sys.Date(), ".pdf") )
-ggsave( fnOut, ff, width=14, height=7 )
+ggsave( fnOut, ff, width=260, height=130, units="mm" )
