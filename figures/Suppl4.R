@@ -34,10 +34,17 @@ X <- filter(counts, gene_name %in% hand_picked_isg) %>%
     inner_join( tas, by="lspci_id" ) %>%
     mutate( Affinity = ifelse(tas == 1, "strong", "weak") )
 
+
+Y <- X %>% group_by( gene_name, Affinity ) %>% summarize_at("count", list) %>%
+    spread( Affinity, count ) %>% mutate( tst = map2( strong, weak, wilcox.test ) ) %>%
+    mutate( txt = map_chr(tst, ~str_c("\nitalic(p) == ", format(.x$p.value, digits=2))) )
+
 pal <- c("1" = "#b2182b", "2" = "#ef8a62", "3" = "#fddbc7")
 gg <- ggplot(X, aes(Affinity, count, color = tas)) + theme_bw() + theme_bold() +
     geom_quasirandom() + facet_wrap(vars(gene_name), scale = "free_y") +
     scale_color_manual( name = "TAS", values=pal ) +
+    geom_text( aes(label=txt), color="black", data = Y, parse=TRUE,
+              x = -Inf, y = Inf, hjust=-0.1, vjust=1.5 ) +
     labs(x = "Binding affinity to TYK2", y = "Normalized count") +
     theme( panel.grid.major.x = element_blank() )
 

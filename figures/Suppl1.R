@@ -29,7 +29,7 @@ pl <- ggplot( BK, aes(x=nFeats) ) + theme_bw() + theme_bold() +
     facet_wrap( ~Task ) +
     geom_line( aes(y=AUC, color=Dataset), lwd=1.5 ) +
     ##        geom_smooth( aes(y=AUC, color=Dataset), se=FALSE ) +
-    geom_text( aes(label=Task), data=TXT, color="black", fontface="bold",
+    geom_text( aes(label=Task), data=TXT, color="black",
               size=5, x=log10(15), y=0.9, hjust=0.25, vjust=0.5 ) +
     scale_color_manual( values=dsPal() ) +
     scale_fill_manual( values=dsPal(), guide=FALSE ) +
