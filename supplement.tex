@@ -3,6 +3,10 @@
 \usepackage[margin=0.5in]{geometry}
 \usepackage{graphicx}
 \usepackage[labelformat=empty]{caption}
+\usepackage{csvsimple}
+\usepackage{longtable}
+\usepackage{flafter}
+\usepackage{afterpage}
 
 \pagenumbering{gobble}
 
@@ -44,7 +48,7 @@
   \caption*{\textbf{Supplementary Fig. 4: Raw expression values of selected interferon-stimulated genes.} Each panel shows normalized transcript counts for a single interferon-stimulated gene (ISG). Individual points correspond to compounds that have a strong (TAS=1) or weak (TAS=2,3) binding to TYK2. Unadjusted $p$-values from two-sided Wilcoxon Rank Sum tests comparing the expression distributions between strong and weak binders are displayed in the top left corner of each panel.}
 \end{figure}
 
-%% Supplemental Figure 4
+%% Supplemental Figure 5
 
 \begin{figure}
   \begin{center}
@@ -60,5 +64,25 @@
   \end{center}
   \caption*{\textbf{Supplementary Fig. 6: Comparison of machine learning methods implemented in DRIAD.} Each method was used to train a model to distinguish early (“A”) vs. late (“C”) disease stages from AMP-AD gene expression data, where only genes associated with a given drug perturbation were considered by each predictor. Model performance was evaluated through leave-pair-out cross-validation and reported as Area under the ROC curve (AUC). The boxplots show how performance varies across 68 drug-associated gene lists that had at least 10 genes that were significantly (FDR $\leq$ 0.05) perturbed by the corresponding drug perturbations. The lower, middle and upper hinges of the boxplot correspond to the 25\%, 50\% (i.e., median) and 75\% quantiles, respectively. The whiskers cover observations that are within 1.5 of the interquantile range (IQR) on each side. Ouliers beyond 1.5*IQR are shown as individual points.}
 \end{figure}
+
+\afterpage{
+\begin{longtable}{l|l|l|l|l|l|l|l}
+    \multicolumn{2}{l}{\bfseries Name} & \multicolumn{6}{l}{\bfseries Sequence} \\ \hline
+    \multicolumn{2}{l}{E5V6NEXT}  & \multicolumn{6}{l}{5'-iCiGiCACACTCTTTCCCTACACGACGCrGrGrG-3'} \\ \hline
+    \multicolumn{2}{l}{E3V6NEXT}  & \multicolumn{6}{l}{/5Biosg/ACACTCTTTCCCTACACGACGCTCTTCCGATCT[BC6]NNNNNNNNNN} \\
+    \multicolumn{2}{l}{}          & \multicolumn{6}{l}{TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTVN-3'} \\ \hline
+    \multicolumn{2}{l}{SINGV6}    & \multicolumn{6}{l}{5'-/5Biosg/ACACTCTTTCCCTACACGACGC-3'} \\ \hline
+    \multicolumn{2}{l}{P5NEXTPT5} & \multicolumn{6}{l}{5'-AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTC} \\
+    \multicolumn{2}{l}{}          & \multicolumn{6}{l}{TTCCG*A*T*C*T-3'} \\ \hline
+    \multicolumn{2}{l}{P5\_PCR}   & \multicolumn{6}{l}{AATGATACGGCGACCACCGAG} \\ \hline
+    \multicolumn{2}{l}{P7\_PCR}   & \multicolumn{6}{l}{CAAGCAGAAGACGGCATACGAG} \\ \hline
+    \multicolumn{2}{l}{N701}      & \multicolumn{6}{l}{5' CAAGCAGAAGACGGCATACGAGATTCGCCTTAGTCTCGTGGGCTCGG} \\ \hline
+    \multicolumn{2}{l}{N703}      & \multicolumn{6}{l}{5' CAAGCAGAAGACGGCATACGAGATTTCTGCCTGTCTCGTGGGCTCGG} \\ \hline
+    \bfseries Name & \bfseries Sequence & \bfseries Name & \bfseries Sequence & \bfseries Name & \bfseries Sequence & \bfseries Name & \bfseries Sequence
+    \csvreader[head to column names]{primers.csv}{}
+    {\\ \hline \csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi&\csvcolvii&\csvcolviii}
+    \\ \hline
+    \caption*{\textbf{Supplementary Table 1: The complete list of primers used for 3' Digital Gene Expression.}}
+\end{longtable}}
 
 \end{document}
